@@ -3,10 +3,20 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Menu, X, AtSign, MessageCircle } from "lucide-react";
-import { nav, site, whatsappLink } from "@/lib/config";
+import { site, whatsappLink } from "@/lib/config";
+import type { Dictionary, Locale } from "@/lib/i18n/types";
 import Logo from "./Logo";
+import LanguageSwitcher from "./LanguageSwitcher";
 
-export default function MobileMenu() {
+export default function MobileMenu({
+  locale,
+  dict,
+  navItems,
+}: {
+  locale: Locale;
+  dict: Dictionary;
+  navItems: { href: string; label: string }[];
+}) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -29,9 +39,9 @@ export default function MobileMenu() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        aria-label="Open menu"
+        aria-label={dict.nav.openMenu}
         aria-expanded={open}
-        className="-mr-2 flex h-11 w-11 items-center justify-center text-ink"
+        className="-me-2 flex h-11 w-11 items-center justify-center text-ink"
       >
         <Menu size={22} strokeWidth={1.5} aria-hidden="true" />
       </button>
@@ -39,14 +49,14 @@ export default function MobileMenu() {
       {open && (
         <div className="fixed inset-0 z-[90] flex flex-col bg-stone">
           <div className="container-editorial flex h-20 items-center justify-between">
-            <Link href="/" onClick={() => setOpen(false)} aria-label={`${site.name} home`}>
+            <Link href={`/${locale}`} onClick={() => setOpen(false)} aria-label={`${site.name} home`}>
               <Logo />
             </Link>
             <button
               type="button"
               onClick={() => setOpen(false)}
-              aria-label="Close menu"
-              className="-mr-2 flex h-11 w-11 items-center justify-center text-ink"
+              aria-label={dict.nav.closeMenu}
+              className="-me-2 flex h-11 w-11 items-center justify-center text-ink"
             >
               <X size={22} strokeWidth={1.5} aria-hidden="true" />
             </button>
@@ -54,7 +64,7 @@ export default function MobileMenu() {
 
           <nav className="container-editorial mt-6 flex flex-1 flex-col justify-between pb-10">
             <ul className="flex flex-col gap-1">
-              {nav.map((item) => (
+              {navItems.map((item) => (
                 <li key={item.href} className="border-b border-line">
                   <Link
                     href={item.href}
@@ -68,15 +78,16 @@ export default function MobileMenu() {
             </ul>
 
             <div className="flex flex-col gap-5">
+              <LanguageSwitcher locale={locale} navLabel={dict.nav.language} className="justify-center" />
               <a
-                href={whatsappLink("Hello Tadreej, I have a question.")}
+                href={whatsappLink(dict.whatsapp.genericQuestion)}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setOpen(false)}
                 className="flex items-center justify-center gap-2 rounded-md bg-ink px-6 py-4 text-sm font-medium tracking-wide text-paper"
               >
                 <MessageCircle size={17} strokeWidth={1.75} aria-hidden="true" />
-                Order on WhatsApp
+                {dict.nav.orderWhatsapp}
               </a>
               <a
                 href={site.instagramUrl}

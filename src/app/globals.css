@@ -33,6 +33,17 @@
   --container-editorial: 78rem;
 }
 
+/* Arabic pages swap in Arabic-script families. Amiri (an elegant Naskh
+   revival) stands in for Fraunces on headings; IBM Plex Sans Arabic
+   (a real sibling of IBM Plex Mono, already used for labels/prices)
+   carries the body text. :lang() matches based on the <html lang>
+   attribute, so this applies to the whole document without any extra
+   markup. */
+:lang(ar) {
+  --font-display: var(--font-amiri);
+  --font-sans: var(--font-plex-arabic);
+}
+
 * {
   border-color: var(--color-line);
 }
@@ -154,10 +165,37 @@ body {
   right: 0;
 }
 
+/* Mirrored for RTL: the sweep should draw in the direction of reading
+   flow (right to left) rather than always left to right. */
+[dir="rtl"] .link-sweep::after {
+  left: 100%;
+  right: 0;
+  background: linear-gradient(
+    270deg,
+    var(--color-umber-900),
+    var(--color-clay-500) 55%,
+    var(--color-sand-100)
+  );
+}
+
+[dir="rtl"] .link-sweep:hover::after,
+[dir="rtl"] .link-sweep:focus-visible::after {
+  left: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .link-sweep::after {
     transition: none;
   }
+}
+
+/* Arabic has no italic tradition -- mechanically slanting Naskh
+   letterforms breaks the connected strokes. Every italic heading in
+   this design uses Fraunces for translated copy, so neutralizing it
+   under Arabic is safe; the brand wordmark pins its own font-style
+   inline and is unaffected by this rule. */
+:lang(ar) .italic {
+  font-style: normal;
 }
 
 .text-balance {

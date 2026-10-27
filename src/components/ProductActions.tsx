@@ -3,25 +3,37 @@
 import { useState } from "react";
 import { Minus, Plus, MessageCircle } from "lucide-react";
 import type { Product } from "@/lib/products";
-import { formatPrice, whatsappLink, whatsappOrderMessage } from "@/lib/config";
+import { whatsappLink } from "@/lib/config";
+import { formatPrice, type Dictionary, type Locale } from "@/lib/i18n";
+import { buildOrderMessage } from "@/lib/i18n/whatsapp";
 
-export default function ProductActions({ product }: { product: Product }) {
-  const [variant, setVariant] = useState(product.variants?.[0]);
+export default function ProductActions({
+  product,
+  locale,
+  dict,
+}: {
+  product: Product;
+  locale: Locale;
+  dict: Dictionary;
+}) {
+  const content = product.content[locale];
+  const [variant, setVariant] = useState(content.variants?.[0]);
   const [qty, setQty] = useState(1);
 
   const orderHref = whatsappLink(
-    whatsappOrderMessage({ productName: product.name, variant, quantity: qty })
+    buildOrderMessage(locale, { productName: content.name, variant, quantity: qty })
   );
+  const price = formatPrice(product.price * qty, locale);
 
   return (
     <div>
-      {product.variants && product.variants.length > 0 && (
+      {content.variants && content.variants.length > 0 && (
         <div className="mt-2">
           <span className="font-mono text-xs uppercase tracking-wider text-ink-soft">
-            Shade
+            {dict.product.shadeLabel}
           </span>
           <div className="mt-2.5 flex flex-wrap gap-2">
-            {product.variants.map((v) => (
+            {content.variants.map((v) => (
               <button
                 key={v}
                 type="button"
@@ -42,13 +54,13 @@ export default function ProductActions({ product }: { product: Product }) {
 
       <div className="mt-6">
         <span className="font-mono text-xs uppercase tracking-wider text-ink-soft">
-          Quantity
+          {dict.product.quantityLabel}
         </span>
         <div className="mt-2.5 inline-flex items-center rounded-md border border-line">
           <button
             type="button"
             onClick={() => setQty((q) => Math.max(1, q - 1))}
-            aria-label="Decrease quantity"
+            aria-label={dict.product.decreaseQty}
             disabled={!product.available}
             className="flex h-11 w-11 items-center justify-center text-ink-soft transition-colors hover:text-ink disabled:opacity-40"
           >
@@ -60,7 +72,7 @@ export default function ProductActions({ product }: { product: Product }) {
           <button
             type="button"
             onClick={() => setQty((q) => Math.min(9, q + 1))}
-            aria-label="Increase quantity"
+            aria-label={dict.product.increaseQty}
             disabled={!product.available}
             className="flex h-11 w-11 items-center justify-center text-ink-soft transition-colors hover:text-ink disabled:opacity-40"
           >
@@ -78,11 +90,11 @@ export default function ProductActions({ product }: { product: Product }) {
             className="flex w-full items-center justify-center gap-2 rounded-md bg-ink px-6 py-4 text-sm font-medium tracking-wide text-paper transition-opacity hover:opacity-85"
           >
             <MessageCircle size={17} strokeWidth={1.75} aria-hidden="true" />
-            Order via WhatsApp — {formatPrice(product.price * qty)}
+            {dict.product.orderViaWhatsappPrice.replace("{price}", price)}
           </a>
         ) : (
           <div className="rounded-md border border-line px-6 py-4 text-center text-sm text-ink-soft">
-            This batch has sold out. Follow Instagram for restock notices.
+            {dict.product.soldOutMessage}
           </div>
         )}
       </div>
@@ -97,11 +109,11 @@ export default function ProductActions({ product }: { product: Product }) {
             className="flex w-full items-center justify-center gap-2 rounded-md bg-ink px-6 py-3.5 text-sm font-medium tracking-wide text-paper"
           >
             <MessageCircle size={16} strokeWidth={1.75} aria-hidden="true" />
-            Order — {formatPrice(product.price * qty)}
+            {dict.product.orderMobilePrice.replace("{price}", price)}
           </a>
         ) : (
           <div className="rounded-md border border-line px-6 py-3.5 text-center text-sm text-ink-soft">
-            Sold out this batch
+            {dict.product.soldOutMobile}
           </div>
         )}
       </div>

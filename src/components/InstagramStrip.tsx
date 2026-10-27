@@ -1,10 +1,11 @@
 import Image from "next/image";
 import { AtSign } from "lucide-react";
 import { site } from "@/lib/config";
+import type { Dictionary } from "@/lib/i18n/types";
 
 const tiles = [1, 2, 3, 4, 5, 6];
 
-export default function InstagramStrip() {
+export default function InstagramStrip({ dict }: { dict: Dictionary }) {
   return (
     <div>
       <div className="grid grid-cols-3 gap-1.5 sm:grid-cols-6">
@@ -15,7 +16,7 @@ export default function InstagramStrip() {
             target="_blank"
             rel="noopener noreferrer"
             className="group relative block aspect-square overflow-hidden bg-paper"
-            aria-label={`View @${site.instagramHandle} on Instagram`}
+            aria-label={`${dict.common.followHandle} @${site.instagramHandle}`}
           >
             <Image
               src={`/instagram/tile-${n}.svg`}
@@ -43,7 +44,7 @@ export default function InstagramStrip() {
           className="link-sweep inline-flex items-center gap-2 font-sans text-sm text-ink"
         >
           <AtSign size={16} strokeWidth={1.5} aria-hidden="true" />
-          Follow @{site.instagramHandle}
+          {dict.common.followHandle} @{site.instagramHandle}
         </a>
       </div>
     </div>

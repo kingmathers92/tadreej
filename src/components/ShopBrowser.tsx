@@ -2,20 +2,30 @@
 
 import { useState } from "react";
 import type { Category, Product } from "@/lib/products";
-import { categories } from "@/lib/products";
+import { categoryRamp } from "@/lib/products";
+import type { Dictionary, Locale } from "@/lib/i18n/types";
 import ProductGrid from "./ProductGrid";
 
-export default function ShopBrowser({ products }: { products: Product[] }) {
+const categoryOrder: Category[] = ["bags", "wallets", "covers"];
+
+export default function ShopBrowser({
+  products,
+  locale,
+  dict,
+}: {
+  products: Product[];
+  locale: Locale;
+  dict: Dictionary;
+}) {
   const [active, setActive] = useState<Category | "all">("all");
 
-  const filtered =
-    active === "all" ? products : products.filter((p) => p.category === active);
+  const filtered = active === "all" ? products : products.filter((p) => p.category === active);
 
   return (
     <div>
       <div
         role="tablist"
-        aria-label="Filter by category"
+        aria-label={dict.shop.title}
         className="flex flex-wrap items-center gap-2 border-b border-line pb-6"
       >
         <button
@@ -26,34 +36,34 @@ export default function ShopBrowser({ products }: { products: Product[] }) {
             active === "all" ? "bg-ink text-paper" : "text-ink-soft hover:text-ink"
           }`}
         >
-          All
+          {dict.shop.filterAll}
         </button>
-        {categories.map((c) => (
+        {categoryOrder.map((id) => (
           <button
-            key={c.id}
+            key={id}
             role="tab"
-            aria-selected={active === c.id}
-            onClick={() => setActive(c.id)}
+            aria-selected={active === id}
+            onClick={() => setActive(id)}
             className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm transition-colors ${
-              active === c.id ? "bg-ink text-paper" : "text-ink-soft hover:text-ink"
+              active === id ? "bg-ink text-paper" : "text-ink-soft hover:text-ink"
             }`}
           >
             <span
               aria-hidden="true"
               className="h-1.5 w-1.5 rounded-full"
-              style={{ background: active === c.id ? "var(--color-sand-100)" : c.ramp }}
+              style={{ background: active === id ? "var(--color-sand-100)" : categoryRamp[id] }}
             />
-            {c.label}
+            {dict.categories[id]}
           </button>
         ))}
       </div>
 
       <p className="mt-6 font-mono text-xs uppercase tracking-wider text-ink-soft">
-        {filtered.length} {filtered.length === 1 ? "piece" : "pieces"}
+        {filtered.length} {filtered.length === 1 ? dict.common.piece : dict.common.pieces}
       </p>
 
       <div className="mt-6">
-        <ProductGrid products={filtered} />
+        <ProductGrid products={filtered} locale={locale} dict={dict} />
       </div>
     </div>
   );
