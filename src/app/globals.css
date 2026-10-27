@@ -1,0 +1,165 @@
+@import "tailwindcss";
+
+/*
+  Token system
+  ------------
+  Ink / Stone / Paper are the neutral base.
+  The Umber -> Sand ramp is the signature: five steps of one hue family
+  standing in for the brand name itself (tadreej / تدريج -- "gradation").
+  It appears as the wordmark mark, section dividers, category tags and
+  hover states rather than as a single flat "accent color".
+*/
+@theme inline {
+  --color-ink: #201c18;
+  --color-ink-soft: #55503f;
+  --color-stone: #eae6dc;
+  --color-paper: #f7f5f0;
+  --color-line: #ddd5c4;
+
+  --color-umber-900: #2b1d14;
+  --color-clay-700: #6b4530;
+  --color-clay-500: #a66f45;
+  --color-clay-300: #d3a876;
+  --color-sand-100: #f0dfc4;
+
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-public-sans);
+  --font-mono: var(--font-plex-mono);
+
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 10px;
+
+  --container-editorial: 78rem;
+}
+
+* {
+  border-color: var(--color-line);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  background: var(--color-stone);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-clay-300);
+  color: var(--color-umber-900);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-umber-900);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+/* Editorial container: a touch narrower than a generic 1280px max-width,
+   with breathing room that scales with viewport rather than a fixed
+   side padding. */
+.container-editorial {
+  max-width: var(--container-editorial);
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .container-editorial {
+    padding-inline: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-editorial {
+    padding-inline: 3rem;
+  }
+}
+
+/* The gradation bar: the recurring signature element. Five hard-edged
+   steps, not a smooth CSS gradient -- it should read as swatches, like
+   dip-test strips from the studio, not a decorative blur. */
+.gradation-bar {
+  display: flex;
+  height: 0.5rem;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+}
+
+.gradation-bar > span {
+  flex: 1 1 0%;
+}
+
+.gradation-bar > span:nth-child(1) {
+  background: var(--color-umber-900);
+}
+.gradation-bar > span:nth-child(2) {
+  background: var(--color-clay-700);
+}
+.gradation-bar > span:nth-child(3) {
+  background: var(--color-clay-500);
+}
+.gradation-bar > span:nth-child(4) {
+  background: var(--color-clay-300);
+}
+.gradation-bar > span:nth-child(5) {
+  background: var(--color-sand-100);
+}
+
+/* Underline sweep used on nav + text links: the gradation ramp draws in
+   on hover instead of a flat underline. */
+.link-sweep {
+  position: relative;
+  text-decoration: none;
+}
+
+.link-sweep::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: -2px;
+  height: 1.5px;
+  background: linear-gradient(
+    90deg,
+    var(--color-umber-900),
+    var(--color-clay-500) 55%,
+    var(--color-sand-100)
+  );
+  transition: right 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.link-sweep:hover::after,
+.link-sweep:focus-visible::after {
+  right: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link-sweep::after {
+    transition: none;
+  }
+}
+
+.text-balance {
+  text-wrap: balance;
+}
