@@ -21,9 +21,9 @@ export const site = {
   instagramHandle: "tadreej.shop",
   instagramUrl: "https://www.instagram.com/tadreej.shop/",
 
-  email: "", // e.g. "hello@tadreej.shop"
+  email: "",
   city: "Tunis, Tunisia",
-  address: "", //
+  address: "",
 
   hours: [
     { day: "Monday – Friday", time: "9:00 – 18:00" },
