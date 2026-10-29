@@ -44,8 +44,8 @@ export const products: Product[] = [
     price: 420,
     bestSeller: true,
     available: true,
-    image: "/products/bag-01.svg",
-    gallery: ["/products/bag-01.svg", "/products/bag-01-alt.svg"],
+    image: "/products/bag-01.jpg",
+    gallery: ["/products/bag-01.jpg", "/products/bag-01-alt.jpg"],
     swatchSeed: 1,
     content: {
       fr: {
@@ -70,8 +70,8 @@ export const products: Product[] = [
     price: 310,
     new: true,
     available: true,
-    image: "/products/bag-02.svg",
-    gallery: ["/products/bag-02.svg"],
+    image: "/products/bag-02.jpg",
+    gallery: ["/products/bag-02.jpg"],
     swatchSeed: 2,
     content: {
       fr: {
@@ -96,8 +96,8 @@ export const products: Product[] = [
     price: 145,
     bestSeller: true,
     available: true,
-    image: "/products/wallet-01.svg",
-    gallery: ["/products/wallet-01.svg", "/products/wallet-01-alt.svg"],
+    image: "/products/wallet-01.jpg",
+    gallery: ["/products/wallet-01.jpg", "/products/wallet-01-alt.jpg"],
     swatchSeed: 3,
     content: {
       fr: {
@@ -121,8 +121,8 @@ export const products: Product[] = [
     category: "wallets",
     price: 85,
     available: true,
-    image: "/products/wallet-02.svg",
-    gallery: ["/products/wallet-02.svg"],
+    image: "/products/wallet-02.jpg",
+    gallery: ["/products/wallet-02.jpg"],
     swatchSeed: 4,
     content: {
       fr: {
@@ -146,8 +146,8 @@ export const products: Product[] = [
     category: "wallets",
     price: 95,
     available: true,
-    image: "/products/wallet-03.svg",
-    gallery: ["/products/wallet-03.svg"],
+    image: "/products/wallet-03.jpg",
+    gallery: ["/products/wallet-03.jpg"],
     swatchSeed: 5,
     content: {
       fr: {
@@ -170,8 +170,8 @@ export const products: Product[] = [
     price: 120,
     bestSeller: true,
     available: true,
-    image: "/products/cover-01.svg",
-    gallery: ["/products/cover-01.svg", "/products/cover-01-alt.svg"],
+    image: "/products/cover-01.jpg",
+    gallery: ["/products/cover-01.jpg", "/products/cover-01-alt.jpg"],
     swatchSeed: 6,
     content: {
       fr: {
@@ -195,8 +195,8 @@ export const products: Product[] = [
     category: "covers",
     price: 135,
     available: true,
-    image: "/products/cover-02.svg",
-    gallery: ["/products/cover-02.svg"],
+    image: "/products/cover-02.jpg",
+    gallery: ["/products/cover-02.jpg"],
     swatchSeed: 7,
     content: {
       fr: {
@@ -218,8 +218,8 @@ export const products: Product[] = [
     category: "wallets",
     price: 160,
     available: false,
-    image: "/products/wallet-04.svg",
-    gallery: ["/products/wallet-04.svg"],
+    image: "/products/wallet-04.jpg",
+    gallery: ["/products/wallet-04.jpg"],
     swatchSeed: 8,
     content: {
       fr: {
