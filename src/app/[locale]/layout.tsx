@@ -161,9 +161,6 @@ export default async function LocaleLayout({
 
   const dict = await getDictionary(locale);
 
-  console.log("Locale:", locale);
-  console.log("Dictionary:", dict);
-
   if (!dict) {
     throw new Error(`Dictionary is undefined for locale: ${locale}`);
   }
