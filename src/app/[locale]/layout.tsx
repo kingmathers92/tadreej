@@ -1,9 +1,11 @@
+import { notFound } from "next/navigation";
+import { hasLocale } from "@/lib/i18n/types";
+import { getDictionary } from "@/lib/i18n";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "../globals.css";
 import { site } from "@/lib/config";
 import { locales, dirFor, toLocale } from "@/lib/i18n/types";
-import { getDictionary } from "@/lib/i18n";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -18,23 +20,45 @@ import Footer from "@/components/Footer";
  */
 const fraunces = localFont({
   src: [
-    { path: "../../fonts/Fraunces-Variable.ttf", style: "normal", weight: "100 900" },
-    { path: "../../fonts/Fraunces-Italic-Variable.ttf", style: "italic", weight: "100 900" },
+    {
+      path: "../../fonts/Fraunces-Variable.ttf",
+      style: "normal",
+      weight: "100 900",
+    },
+    {
+      path: "../../fonts/Fraunces-Italic-Variable.ttf",
+      style: "italic",
+      weight: "100 900",
+    },
   ],
   variable: "--font-fraunces",
   display: "swap",
 });
 
 const publicSans = localFont({
-  src: [{ path: "../../fonts/PublicSans-Variable.ttf", style: "normal", weight: "100 900" }],
+  src: [
+    {
+      path: "../../fonts/PublicSans-Variable.ttf",
+      style: "normal",
+      weight: "100 900",
+    },
+  ],
   variable: "--font-public-sans",
   display: "swap",
 });
 
 const plexMono = localFont({
   src: [
-    { path: "../../fonts/IBMPlexMono-Regular.ttf", weight: "400", style: "normal" },
-    { path: "../../fonts/IBMPlexMono-Medium.ttf", weight: "500", style: "normal" },
+    {
+      path: "../../fonts/IBMPlexMono-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../fonts/IBMPlexMono-Medium.ttf",
+      weight: "500",
+      style: "normal",
+    },
   ],
   variable: "--font-plex-mono",
   display: "swap",
@@ -51,9 +75,21 @@ const amiri = localFont({
 
 const plexArabic = localFont({
   src: [
-    { path: "../../fonts/IBMPlexSansArabic-Regular.ttf", weight: "400", style: "normal" },
-    { path: "../../fonts/IBMPlexSansArabic-Medium.ttf", weight: "500", style: "normal" },
-    { path: "../../fonts/IBMPlexSansArabic-SemiBold.ttf", weight: "600", style: "normal" },
+    {
+      path: "../../fonts/IBMPlexSansArabic-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../fonts/IBMPlexSansArabic-Medium.ttf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../fonts/IBMPlexSansArabic-SemiBold.ttf",
+      weight: "600",
+      style: "normal",
+    },
   ],
   variable: "--font-plex-arabic",
   display: "swap",
@@ -74,9 +110,13 @@ export async function generateMetadata({
 }: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
-  const { locale: localeParam } = await params;
-  const locale = toLocale(localeParam);
-  const dict = getDictionary(locale);
+  const { locale } = await params;
+
+  if (!hasLocale(locale)) {
+    notFound();
+  }
+
+  const dict = await getDictionary(locale);
   const title = `${site.name} \u2014 ${dict.site.tagline}`;
 
   return {
@@ -113,26 +153,41 @@ export default async function LocaleLayout({
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
 }) {
-  const { locale: localeParam } = await params;
-  const locale = toLocale(localeParam);
-  const dict = getDictionary(locale);
-  const dir = dirFor(locale);
+  const { locale } = await params;
+
+  if (!hasLocale(locale)) {
+    notFound();
+  }
+
+  const dict = await getDictionary(locale);
+
+  console.log("Locale:", locale);
+  console.log("Dictionary:", dict);
+
+  if (!dict) {
+    throw new Error(`Dictionary is undefined for locale: ${locale}`);
+  }
 
   return (
-    <html lang={dict.htmlLang} dir={dir} className={fontVariables}>
-      <body className="flex min-h-screen flex-col">
-        <a
-          href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-ink focus:px-4 focus:py-2 focus:text-paper"
-        >
-          {dict.nav.skipToContent}
-        </a>
-        <Header locale={locale} dict={dict} />
-        <main id="main" className="flex-1">
-          {children}
-        </main>
-        <Footer locale={locale} dict={dict} />
-      </body>
-    </html>
+    <div
+      lang={dict.htmlLang}
+      dir={dirFor(locale)}
+      className={`${fontVariables} flex min-h-screen flex-col`}
+    >
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-ink focus:px-4 focus:py-2 focus:text-paper"
+      >
+        {dict.nav.skipToContent}
+      </a>
+
+      <Header locale={locale} dict={dict} />
+
+      <main id="main" className="flex-1">
+        {children}
+      </main>
+
+      <Footer locale={locale} dict={dict} />
+    </div>
   );
 }

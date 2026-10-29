@@ -3,6 +3,9 @@ export type Locale = "fr" | "ar";
 export const locales: Locale[] = ["fr", "ar"];
 export const defaultLocale: Locale = "fr";
 
+export const hasLocale = (value: string): value is Locale =>
+  (locales as readonly string[]).includes(value);
+
 export function dirFor(locale: Locale): "ltr" | "rtl" {
   return locale === "ar" ? "rtl" : "ltr";
 }
