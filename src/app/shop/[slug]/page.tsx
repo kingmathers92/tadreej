@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { getProduct, getRelated, products, categories } from "@/lib/products";
-import { formatPrice } from "@/lib/config";
+import { formatPrice } from "@/lib/i18n";
 import ProductGallery from "@/components/ProductGallery";
 import ProductActions from "@/components/ProductActions";
 import ProductGrid from "@/components/ProductGrid";
@@ -76,7 +76,9 @@ export default async function ProductPage({
               {product.name}
             </h1>
 
-            <p className="mt-3 font-mono text-lg text-ink">{formatPrice(product.price)}</p>
+            <p className="mt-3 font-mono text-lg text-ink">
+              {formatPrice(product.price)}
+            </p>
 
             <p className="mt-5 text-[1.02rem] leading-relaxed text-ink-soft">
               {product.description}
@@ -92,7 +94,10 @@ export default async function ProductPage({
       {related.length > 0 && (
         <section className="border-t border-line bg-paper/60 py-16 lg:py-20">
           <div className="container-editorial">
-            <SectionHeading eyebrow="You might also like" title="More from the studio." />
+            <SectionHeading
+              eyebrow="You might also like"
+              title="More from the studio."
+            />
             <div className="mt-10">
               <ProductGrid products={related} />
             </div>
