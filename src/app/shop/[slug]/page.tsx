@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
-import { getProduct, getRelated, products, categories } from "@/lib/products";
+import { getProduct, getRelated, products, categoryRamp } from "@/lib/products";
 import { formatPrice } from "@/lib/i18n";
 import ProductGallery from "@/components/ProductGallery";
 import ProductActions from "@/components/ProductActions";
@@ -41,7 +41,10 @@ export default async function ProductPage({
   const product = getProduct(slug);
   if (!product) notFound();
 
-  const category = categories.find((c) => c.id === product.category);
+  const category = {
+    label: product.category,
+    ramp: categoryRamp[product.category],
+  };
   const related = getRelated(product);
 
   return (
